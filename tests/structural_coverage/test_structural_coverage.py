@@ -1,12 +1,33 @@
 import pytest
 
-from tests.test_helpers import assert_tax_case, create_engine
+from App.Tax_Calculator import TaxEngine
+
+
+def assert_tax_case(
+    engine,
+    income,
+    category,
+    age,
+    is_resident,
+    expected,
+    has_dependents=False,
+    is_married=False,
+):
+    result = engine.calculate_annual_tax(
+        income=income,
+        category=category,
+        age=age,
+        is_resident=is_resident,
+        has_dependents=has_dependents,
+        is_married=is_married,
+    )
+    assert result == expected
 
 
 # Student 3 (explicit) - Structural Coverage / White-Box
 @pytest.fixture
 def engine():
-    return create_engine()
+    return TaxEngine()
 
 
 @pytest.mark.parametrize(
