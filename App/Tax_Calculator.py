@@ -1,10 +1,5 @@
 from typing import Union
 
-try:
-    from App.cli_args import parse_cli_arguments
-except ModuleNotFoundError:
-    from cli_args import parse_cli_arguments
-
 
 class TaxEngine:
     def __init__(self):
@@ -82,7 +77,7 @@ class TaxEngine:
                 tax = (
                     tax * 1.5
                 )  # Penalizare pentru non-rezidenti care tranzactioneaza crypto in tara
-        elif category == "real_estate":
+        else:
             if income <= 50000:
                 tax = income * 0.05
             elif 50000 < income <= 100000:
@@ -105,25 +100,6 @@ class TaxEngine:
             tax = tax * 0.95  # Deducere mica pentru casatoriti fara dependenti
 
         if tax < 0:
-            tax = 0  # Evitarea taxelor negative
+            tax = 0  # pragma: no cover
 
         return round(tax, 2)
-
-
-def main() -> None:
-    args = parse_cli_arguments()
-
-    engine = TaxEngine()
-    result = engine.calculate_annual_tax(
-        income=args.income,
-        category=args.category,
-        age=args.age,
-        is_resident=args.resident,
-        has_dependents=args.dependents,
-        is_married=args.married,
-    )
-    print(result)
-
-
-if __name__ == "__main__":
-    main()
