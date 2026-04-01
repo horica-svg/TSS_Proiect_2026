@@ -6,57 +6,34 @@ from tests.structural_coverage.helpers import assert_tax_case
 @pytest.mark.parametrize(
     "income, category, age, is_resident, has_dependents, is_married, expected",
     [
-        # --- Validari initiale ---
+        # --- Validari initiale (Iesiri rapide) ---
         ("a", "salary", 20, True, False, False, "Error: Invalid Data Type"),
         (-1, "salary", 20, True, False, False, "Error: Invalid Income"),
         (3000, "salary", -1, True, False, False, "Error: Invalid Age"),
         (3000, "salari", 20, True, False, False, "Error: Invalid Category"),
-        # --- Categoria Salary si Deduceri standard ---
-        # Acopera if income <= 10000 si reducere tineri < 25
-        (3000, "salary", 26, True, False, False, 300.0),
-        # Acopera reducere seniori venit mic
-        (20000, "salary", 26, True, False, False, 2500.0),
-        # Acopera reducere seniori venit mare
-        (60000, "salary", 26, True, False, False, 9000.0),
+        # --- Categoria Salary ---
+        (3000, "salary", 24, True, False, True, 256.5),
+        (20000, "salary", 65, True, False, True, 1900.0),
+        (60000, "salary", 65, True, False, True, 7267.5),
         # --- Categoria Business ---
-        # Acopera elif income < 20000
-        (10000, "business", 40, True, False, False, 2000.0),
-        # Acopera if income > 200000
-        (250000, "business", 40, True, False, False, 65000.0),
-        # Business normal -> Sare peste ambele if-uri de reducere/taxare extra
-        (100000, "business", 40, True, False, False, 25000.0),
+        (10000, "business", 65, True, False, True, 1520.0),
+        (250000, "business", 65, True, False, True, 52487.5),
+        (100000, "business", 65, True, False, True, 20187.5),
         # --- Categoria Investment ---
-        # Acopera elif income < 5000
-        (3000, "investment", 40, True, False, False, 382.5),
-        # Acopera if income > 100000
-        (150000, "investment", 40, True, False, False, 24000.0),
-        # Investment normal -> Sare peste ambele if-uri
-        (50000, "investment", 40, True, False, False, 7500.0),
+        (3000, "investment", 65, True, False, True, 290.7),
+        (150000, "investment", 65, True, False, True, 19380.0),
+        (50000, "investment", 40, False, False, True, 6412.5),
         # --- Categoria Freelance ---
-        # Acopera taxare extra pentru rezidenti > 50000
-        (60000, "freelance", 40, True, False, False, 8000.0),
-        # Critic: forteaza intrarea pe liniile cu tax -= 500 si if tax < 0: tax = 0
-        (1000, "freelance", 40, True, True, False, 0.0),
-        # Freelance normal -> Sare peste if-ul de rezidenta si if-ul de dependenti
-        (40000, "freelance", 40, True, False, False, 4800.0),
+        (60000, "freelance", 65, True, False, True, 6460.0),
+        (1000, "freelance", 24, True, True, True, 0.0),
+        (40000, "freelance", 40, False, True, True, 3289.5),
         # --- Categoria Crypto ---
-        # Acopera if income > 10000 si if not is_resident
-        (15000, "crypto", 40, False, False, False, 3750.0),
-        # Crypto normal -> Sare peste supra-taxare si penalizare non-rezident
-        (5000, "crypto", 40, True, False, False, 500.0),
+        (15000, "crypto", 65, False, False, True, 2850.0),
+        (5000, "crypto", 65, True, False, True, 380.0),
         # --- Categoria Real Estate ---
-        # Acopera if income <= 50000
-        (40000, "real_estate", 40, True, False, False, 2000.0),
-        # Acopera elif 50000 < income <= 100000
-        (75000, "real_estate", 40, True, False, False, 5000.0),
-        (150000, "real_estate", 40, True, False, False, 17500.0),
-        # --- Deduceri compuse ---
-        (3000, "salary", 22, True, False, False, 270.0),
-        (3000, "salary", 65, True, False, False, 240.0),
-        (40000, "business", 70, True, False, False, 8500.0),
-        # --- Conditii de familie ---
-        (70000, "salary", 30, True, True, True, 9350.0),
-        (2000, "salary", 30, True, False, True, 190.0),
+        (40000, "real_estate", 65, True, True, True, 1445.0),
+        (75000, "real_estate", 40, False, True, True, 3825.0),
+        (150000, "real_estate", 65, True, False, True, 14131.25),
     ],
 )
 def test_statement_coverage(
