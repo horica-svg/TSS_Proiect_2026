@@ -1,4 +1,4 @@
-.PHONY: help install test test-structural structural-cov cov-statement cov-statement-html clean
+.PHONY: help install test test-structural structural-cov cov-statement cov-statement-html expected-dry expected-update expected-check clean
 
 PYTHON ?= $(if $(wildcard venv/bin/python),venv/bin/python,python)
 PIP := $(PYTHON) -m pip
@@ -14,6 +14,8 @@ COV_ARGS := --cov=$(COV_TARGET) --cov-config=.coveragerc
 KIND ?= statement
 MODE ?= statement
 HTML ?= 0
+TARGET ?= all
+EXPECTED_SCRIPT := scripts/update_expected_values.py
 
 help:
 	@echo "Targets:"
@@ -30,6 +32,9 @@ help:
 	@echo "                     make structural-cov KIND=branch MODE=branch HTML=0"
 	@echo "  cov-statement    Alias for statement + no HTML"
 	@echo "  cov-statement-html Alias for statement + HTML"
+	@echo "  expected-dry     Preview expected drift (TARGET=all|statement|branch|condition|paths)"
+	@echo "  expected-update  Recompute and write expected values"
+	@echo "  expected-check   Fail if expected values are out of sync"
 	@echo "  clean            Remove cache/artifacts"
 
 install:
@@ -67,6 +72,15 @@ cov-statement:
 
 cov-statement-html:
 	$(MAKE) structural-cov KIND=statement MODE=statement HTML=1
+
+expected-dry:
+	$(PYTHON) $(EXPECTED_SCRIPT) --target $(TARGET) --dry-run
+
+expected-update:
+	$(PYTHON) $(EXPECTED_SCRIPT) --target $(TARGET)
+
+expected-check:
+	$(PYTHON) $(EXPECTED_SCRIPT) --target $(TARGET) --check
 
 clean:
 	rm -rf .pytest_cache .coverage coverage.xml htmlcov

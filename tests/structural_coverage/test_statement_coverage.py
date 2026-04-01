@@ -13,11 +13,11 @@ from tests.structural_coverage.helpers import assert_tax_case
         (3000, "salari", 20, True, False, False, "Error: Invalid Category"),
         # --- Categoria Salary si Deduceri standard ---
         # Acopera if income <= 10000 si reducere tineri < 25
-        (3000, "salary", 26, True, False, False, 270.0),
+        (3000, "salary", 26, True, False, False, 300.0),
         # Acopera reducere seniori venit mic
-        (20000, "salary", 26, True, False, False, 2000.0),
+        (20000, "salary", 26, True, False, False, 2500.0),
         # Acopera reducere seniori venit mare
-        (60000, "salary", 26, True, False, False, 7650.0),
+        (60000, "salary", 26, True, False, False, 9000.0),
         # --- Categoria Business ---
         # Acopera elif income < 20000
         (10000, "business", 40, True, False, False, 2000.0),
@@ -51,8 +51,12 @@ from tests.structural_coverage.helpers import assert_tax_case
         (75000, "real_estate", 40, True, False, False, 5000.0),
         (150000, "real_estate", 40, True, False, False, 17500.0),
         # --- Deduceri compuse ---
-        (3000, "salary", 22, True, False, False, 243.0),
-        (3000, "salary", 65, True, False, False, 216.0),
+        (3000, "salary", 22, True, False, False, 270.0),
+        (3000, "salary", 65, True, False, False, 240.0),
+        (40000, "business", 70, True, False, False, 8500.0),
+        # --- Conditii de familie ---
+        (70000, "salary", 30, True, True, True, 9350.0),
+        (2000, "salary", 30, True, False, True, 190.0),
     ],
 )
 def test_statement_coverage(

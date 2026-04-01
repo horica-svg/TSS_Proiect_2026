@@ -23,3 +23,9 @@ Ghid complet Makefile:
 - `make structural-cov KIND=branch MODE=branch HTML=0`
 - `make cov-statement`
 - `make cov-statement-html`
+
+### Auto expected values
+
+- `make expected-dry TARGET=statement`
+- `make expected-update TARGET=all`
+- `make expected-check TARGET=all`

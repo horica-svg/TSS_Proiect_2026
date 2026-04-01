@@ -71,6 +71,24 @@ make cov-statement-html
 
 Acestea sunt shortcut-uri pentru `KIND=statement` cu HTML `0` sau `1`.
 
+## Auto-update expected pentru teste
+
+Comenzi:
+
+```bash
+make expected-dry TARGET=statement
+make expected-update TARGET=all
+make expected-check TARGET=all
+```
+
+`TARGET` accepta: `all`, `statement`, `branch`, `condition`, `paths`.
+
+Ce fac:
+
+- `expected-dry`: arata diferentele detectate fara sa modifice fisiere.
+- `expected-update`: recalculeaza si scrie valorile `expected` in testele structurale.
+- `expected-check`: verifica drift-ul si intoarce cod de eroare daca exista diferente.
+
 ## Curatare artefacte
 
 ```bash
