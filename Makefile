@@ -1,4 +1,4 @@
-.PHONY: help install test test-structural test-file test-structural-statement test-structural-branch test-structural-condition test-structural-paths cov cov-branch cov-html cov-xml cov-statement cov-statement-html mermaid-build clean
+.PHONY: help install test test-structural structural-cov cov-statement cov-statement-html clean
 
 PYTHON ?= $(if $(wildcard venv/bin/python),venv/bin/python,python)
 PIP := $(PYTHON) -m pip
@@ -8,29 +8,28 @@ TEST_DIR := tests
 STRUCTURAL_TEST_DIR := tests/structural_coverage
 STRUCTURAL_STATEMENT_FILE := $(STRUCTURAL_TEST_DIR)/test_statement_coverage.py
 STRUCTURAL_BRANCH_FILE := $(STRUCTURAL_TEST_DIR)/test_branch_coverage.py
-STRUCTURAL_CONDITION_FILE := $(STRUCTURAL_TEST_DIR)/test_condition_mcdc_coverage.py
+STRUCTURAL_CONDITION_FILE := $(STRUCTURAL_TEST_DIR)/test_condition_coverage.py
 STRUCTURAL_PATHS_FILE := $(STRUCTURAL_TEST_DIR)/test_independent_paths_coverage.py
-MERMAID_DOC := docs/tax_calculator_cfg_mermaid.md
 COV_ARGS := --cov=$(COV_TARGET) --cov-config=.coveragerc
-STATEMENT_TEST := $(STRUCTURAL_STATEMENT_FILE)::test_statement_coverage
+KIND ?= statement
+MODE ?= statement
+HTML ?= 0
 
 help:
 	@echo "Targets:"
 	@echo "  install          Install deps from requirements.txt"
 	@echo "  test             Run all tests"
 	@echo "  test-structural  Run structural coverage tests only"
-	@echo "  test-structural-statement Run statement structural tests"
-	@echo "  test-structural-branch Run branch structural tests"
-	@echo "  test-structural-condition Run condition/MCDC structural tests"
-	@echo "  test-structural-paths Run independent paths structural tests"
-	@echo "  test-file        Run one test file: make test-file TEST=tests/...py"
-	@echo "  cov              Coverage (line) + missing lines in terminal"
-	@echo "  cov-branch       Branch coverage + missing lines in terminal"
-	@echo "  cov-html         Branch coverage + HTML report (htmlcov/)"
-	@echo "  cov-xml          Branch coverage + XML report (coverage.xml)"
-	@echo "  cov-statement    Coverage only for test_statement_coverage"
-	@echo "  cov-statement-html Coverage for test_statement_coverage + HTML report"
-	@echo "  mermaid-build    Build Mermaid diagrams from markdown into docs/build"
+	@echo "  structural-cov   Structural coverage on one file"
+	@echo "                   KIND=statement|branch|condition|paths"
+	@echo "                   MODE=statement|branch"
+	@echo "                   HTML=0|1"
+	@echo "                   Examples:"
+	@echo "                     make structural-cov KIND=statement MODE=statement HTML=0"
+	@echo "                     make structural-cov KIND=statement MODE=statement HTML=1"
+	@echo "                     make structural-cov KIND=branch MODE=branch HTML=0"
+	@echo "  cov-statement    Alias for statement + no HTML"
+	@echo "  cov-statement-html Alias for statement + HTML"
 	@echo "  clean            Remove cache/artifacts"
 
 install:
@@ -42,43 +41,33 @@ test:
 test-structural:
 	$(PYTEST) $(STRUCTURAL_TEST_DIR)
 
-test-structural-statement:
-	$(PYTEST) $(STRUCTURAL_STATEMENT_FILE)
-
-test-structural-branch:
-	$(PYTEST) $(STRUCTURAL_BRANCH_FILE)
-
-test-structural-condition:
-	$(PYTEST) $(STRUCTURAL_CONDITION_FILE)
-
-test-structural-paths:
-	$(PYTEST) $(STRUCTURAL_PATHS_FILE)
-
-test-file:
-	@test -n "$(TEST)" || (echo "Missing TEST. Example: make test-file TEST=tests/structural_coverage/test_statement_coverage.py" && exit 1)
-	$(PYTEST) $(TEST)
-
-cov:
-	$(PYTEST) $(COV_ARGS) --cov-report=term-missing $(TEST_DIR)
-
-cov-branch:
-	$(PYTEST) $(COV_ARGS) --cov-branch --cov-report=term-missing $(TEST_DIR)
-
-cov-html:
-	$(PYTEST) $(COV_ARGS) --cov-branch --cov-report=term-missing --cov-report=html $(TEST_DIR)
-
-cov-xml:
-	$(PYTEST) $(COV_ARGS) --cov-branch --cov-report=term-missing --cov-report=xml $(TEST_DIR)
+structural-cov:
+	@case "$(KIND)" in \
+		statement) TEST_FILE="$(STRUCTURAL_STATEMENT_FILE)" ;; \
+		branch) TEST_FILE="$(STRUCTURAL_BRANCH_FILE)" ;; \
+		condition) TEST_FILE="$(STRUCTURAL_CONDITION_FILE)" ;; \
+		paths) TEST_FILE="$(STRUCTURAL_PATHS_FILE)" ;; \
+		*) echo "Invalid KIND='$(KIND)'. Use: statement|branch|condition|paths"; exit 1 ;; \
+	esac; \
+	case "$(MODE)" in \
+		statement) COV_MODE_ARGS="" ;; \
+		branch) COV_MODE_ARGS="--cov-branch" ;; \
+		*) echo "Invalid MODE='$(MODE)'. Use: statement|branch"; exit 1 ;; \
+	esac; \
+	case "$(HTML)" in \
+		0) HTML_ARGS="" ;; \
+		1) HTML_ARGS="--cov-report=html" ;; \
+		*) echo "Invalid HTML='$(HTML)'. Use: 0|1"; exit 1 ;; \
+	esac; \
+	echo "Running structural coverage: KIND=$(KIND) MODE=$(MODE) HTML=$(HTML) FILE=$$TEST_FILE"; \
+	$(PYTEST) $(COV_ARGS) $$COV_MODE_ARGS --cov-report=term-missing $$HTML_ARGS $$TEST_FILE
 
 cov-statement:
-	$(PYTEST) $(COV_ARGS) --cov-report=term-missing $(STATEMENT_TEST)
+	$(MAKE) structural-cov KIND=statement MODE=statement HTML=0
 
 cov-statement-html:
-	$(PYTEST) $(COV_ARGS) --cov-report=term-missing --cov-report=html $(STATEMENT_TEST)
-
-mermaid-build:
-	bash scripts/build_mermaid.sh $(MERMAID_DOC)
+	$(MAKE) structural-cov KIND=statement MODE=statement HTML=1
 
 clean:
-	rm -rf .pytest_cache .coverage coverage.xml htmlcov docs/build
+	rm -rf .pytest_cache .coverage coverage.xml htmlcov
 	find . -type d -name "__pycache__" -prune -exec rm -rf {} +

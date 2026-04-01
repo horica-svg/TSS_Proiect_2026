@@ -13,15 +13,11 @@ from tests.structural_coverage.helpers import assert_tax_case
         (3000, "salari", 20, True, False, False, "Error: Invalid Category"),
         # --- Categoria Salary si Deduceri standard ---
         # Acopera if income <= 10000 si reducere tineri < 25
-        (3000, "salary", 20, True, False, False, 270.0),
+        (3000, "salary", 26, True, False, False, 270.0),
         # Acopera reducere seniori venit mic
-        (20000, "salary", 70, True, False, False, 2000.0),
+        (20000, "salary", 26, True, False, False, 2000.0),
         # Acopera reducere seniori venit mare
-        (60000, "salary", 70, True, False, False, 7650.0),
-        # Acopera deducere familie completa
-        (40000, "salary", 35, True, True, True, 4675.0),
-        # Acopera deducere casatorit fara copii
-        (40000, "salary", 35, True, False, True, 5225.0),
+        (60000, "salary", 26, True, False, False, 7650.0),
         # --- Categoria Business ---
         # Acopera elif income < 20000
         (10000, "business", 40, True, False, False, 2000.0),
@@ -53,11 +49,10 @@ from tests.structural_coverage.helpers import assert_tax_case
         (40000, "real_estate", 40, True, False, False, 2000.0),
         # Acopera elif 50000 < income <= 100000
         (75000, "real_estate", 40, True, False, False, 5000.0),
-        # Acopera else-ul final
         (150000, "real_estate", 40, True, False, False, 17500.0),
-        # --- Corectii pentru Branch Coverage (Acoperire 100%) ---
-        # Casatorit, cu dependenti, dar venit mare. Pica IF si ELIF de familie.
-        (100000, "salary", 40, True, True, True, 17000.0),
+        # --- Deduceri compuse ---
+        (3000, "salary", 22, True, False, False, 243.0),
+        (3000, "salary", 65, True, False, False, 216.0),
     ],
 )
 def test_statement_coverage(

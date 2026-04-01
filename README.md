@@ -7,19 +7,19 @@
 
 ## Automation
 
+Ghid complet Makefile:
+
+- `docs/MAKEFILE_GUIDE.md`
+
 ### Teste
 
 - `make test`
 - `make test-structural`
-- `make test-file TEST=tests/structural_coverage/test_structural_coverage.py`
 
-### Coverage (pytest-cov)
+### Structural Coverage
 
-- `make cov`
-- `make cov-branch`
-- `make cov-html` (genereaza `htmlcov/index.html`)
-- `make cov-xml`
-
-### Mermaid build
-
-- `make mermaid-build`
+- `make structural-cov KIND=statement MODE=statement HTML=0`
+- `make structural-cov KIND=statement MODE=statement HTML=1` (genereaza `htmlcov/index.html`)
+- `make structural-cov KIND=branch MODE=branch HTML=0`
+- `make cov-statement`
+- `make cov-statement-html`
