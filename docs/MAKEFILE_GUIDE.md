@@ -89,6 +89,31 @@ Ce fac:
 - `expected-update`: recalculeaza si scrie valorile `expected` in testele structurale.
 - `expected-check`: verifica drift-ul si intoarce cod de eroare daca exista diferente.
 
+## Build pentru diagrama Mermaid
+
+Comenzi:
+
+```bash
+make mermaid-build
+make mermaid-build-file MERMAID_INPUT=docs/tax_calculator_cfg_mermaid.md
+```
+
+Ce fac:
+
+- `mermaid-build`: ruleaza workflow-ul standard de export pentru CFG-ul principal.
+- `mermaid-build-file`: permite export pentru orice fisier markdown care contine primul bloc `mermaid`.
+
+Output-ul este scris in:
+
+- `docs/build/tax_calculator_cfg.svg`
+- `docs/build/tax_calculator_cfg.png`
+
+Curatare artefacte Mermaid:
+
+```bash
+make mermaid-clean
+```
+
 ## Curatare artefacte
 
 ```bash

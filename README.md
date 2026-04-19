@@ -29,3 +29,9 @@ Ghid complet Makefile:
 - `make expected-dry TARGET=statement`
 - `make expected-update TARGET=all`
 - `make expected-check TARGET=all`
+
+### Build Mermaid CFG
+
+- `make mermaid-build` (build pentru `docs/tax_calculator_cfg_mermaid.md`)
+- `make mermaid-build-file MERMAID_INPUT=docs/tax_calculator_cfg_mermaid.md` (build pentru un fisier specific)
+- output: `docs/build/tax_calculator_cfg.svg` si `docs/build/tax_calculator_cfg.png`

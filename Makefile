@@ -1,4 +1,4 @@
-.PHONY: help install test test-structural structural-cov cov-statement cov-statement-html expected-dry expected-update expected-check clean
+.PHONY: help install test test-structural structural-cov cov-statement cov-statement-html expected-dry expected-update expected-check mermaid-build mermaid-build-file mermaid-clean clean
 
 PYTHON ?= $(if $(wildcard venv/bin/python),venv/bin/python,python)
 PIP := $(PYTHON) -m pip
@@ -16,6 +16,9 @@ MODE ?= statement
 HTML ?= 0
 TARGET ?= all
 EXPECTED_SCRIPT := scripts/update_expected_values.py
+MERMAID_SCRIPT := scripts/build_mermaid.sh
+MERMAID_INPUT ?= docs/tax_calculator_cfg_mermaid.md
+MERMAID_OUT_DIR := docs/build
 
 help:
 	@echo "Targets:"
@@ -35,6 +38,9 @@ help:
 	@echo "  expected-dry     Preview expected drift (TARGET=all|statement|branch|condition|paths)"
 	@echo "  expected-update  Recompute and write expected values"
 	@echo "  expected-check   Fail if expected values are out of sync"
+	@echo "  mermaid-build    Build CFG diagram assets from default markdown"
+	@echo "  mermaid-build-file Build Mermaid assets from MERMAID_INPUT=<path>"
+	@echo "  mermaid-clean    Remove Mermaid build artifacts"
 	@echo "  clean            Remove cache/artifacts"
 
 install:
@@ -82,6 +88,16 @@ expected-update:
 expected-check:
 	$(PYTHON) $(EXPECTED_SCRIPT) --target $(TARGET) --check
 
+mermaid-build:
+	bash $(MERMAID_SCRIPT) docs/tax_calculator_cfg_mermaid.md
+
+mermaid-build-file:
+	bash $(MERMAID_SCRIPT) $(MERMAID_INPUT)
+
+mermaid-clean:
+	rm -f $(MERMAID_OUT_DIR)/tax_calculator_cfg.svg $(MERMAID_OUT_DIR)/tax_calculator_cfg.png
+
 clean:
 	rm -rf .pytest_cache .coverage coverage.xml htmlcov
+	$(MAKE) mermaid-clean
 	find . -type d -name "__pycache__" -prune -exec rm -rf {} +
