@@ -1,0 +1,127 @@
+\documentclass{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[romanian]{babel}
+\usepackage{hyperref}
+
+% Tema prezentării
+\usetheme{Madrid}
+\usecolortheme{default}
+
+\title[Analiză și Testare Tax Calculator]{Analiza și Testarea Aplicației Tax Calculator}
+\subtitle{Proiect TSS 2026}
+\author{Echipa de Proiect}
+\date{\today}
+
+\begin{document}
+
+% Slide de titlu
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% Cuprins
+\begin{frame}{Cuprins}
+    \tableofcontents
+\end{frame}
+
+\section{Obiectivele Proiectului}
+\begin{frame}{1. Obiectivele Proiectului}
+    \begin{itemize}
+        \item Implementarea unui motor de calcul fiscal robust.
+        \item Aplicarea tehnicilor de \textbf{Testare Funcțională}.
+        \item Analiza \textbf{Acoperirii Structurale} (Statement \& Branch).
+        \item Evaluarea prin \textbf{Mutation Testing}.
+        \item Integrarea tool-urilor \textbf{AI (GitHub Copilot)}.
+    \end{itemize}
+\end{frame}
+
+\section{Arhitectura Aplicației}
+\begin{frame}{2. Arhitectura Aplicației}
+    \begin{itemize}
+        \item \textbf{Limbaj:} Python 3.13.2
+        \item \textbf{Clasa principală:} \texttt{TaxEngine}
+        \item \textbf{Funcția cheie:} \texttt{calculate\_annual\_tax}
+        \item \textbf{Caracteristici:}
+        \begin{itemize}
+            \item Validări riguroase (Income, Age, Category).
+            \item Dispatcher pe categorii (Salary, Business, Freelance, Crypto, etc.).
+            \item Sistem de reduceri compuse (Senior, Rezidență, Familie).
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\section{Testare Funcțională}
+\begin{frame}{3. Testare Funcțională}
+    \begin{itemize}
+        \item \textbf{Tehnici:} BVA (Boundary Value Analysis) \& EP (Equivalence Partitioning).
+        \item \textbf{Cazuri acoperite:}
+        \begin{itemize}
+            \item Validări tipuri date.
+            \item Limite venit (0 - 1.000.000).
+            \item Praguri specifice pentru fiecare categorie de impozitare.
+        \end{itemize}
+        \item \textbf{Rezultat:} Toate testele funcționale trecute cu succes.
+    \end{itemize}
+\end{frame}
+
+\section{Acoperire Structurală}
+\begin{frame}{4. Acoperire Structurală (CFG)}
+    \begin{itemize}
+        \item \textbf{Complexitate Ciclomatică:} 41 (Grad F).
+        \item \textbf{Graf de Control (CFG):} 31 de noduri principale.
+        \item \textbf{Strategie:} Testarea drumurilor independente (Basis Path Testing).
+        \item \textbf{Acoperire finală:}
+        \begin{itemize}
+            \item \textbf{Statement:} 100\%
+            \item \textbf{Branch:} 100\%
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\section{Mutation Testing}
+\begin{frame}{5. Mutation Testing}
+    \begin{itemize}
+        \item \textbf{Manual:} Generare de mutanți de ordin 1 (echivalenți, omorâți, supraviețuiți).
+        \item \textbf{Automat:} Utilizarea \texttt{mutmut}.
+        \item \textbf{Scor final:} \textbf{~79\%}.
+        \item \textbf{Îmbunătățiri:} Identificarea unor cazuri marginale neacoperite inițial de testele funcționale.
+    \end{itemize}
+\end{frame}
+
+\section{Utilizare GitHub Copilot}
+\begin{frame}{6. Utilizare GitHub Copilot}
+    \begin{itemize}
+        \item \textbf{Rol:} Asistent în scrierea testelor unitare și calculul valorilor așteptate.
+        \item \textbf{Beneficii:} Viteză crescută de implementare.
+        \item \textbf{Atenție:} Necesită validare manuală a logicii matematice complexe.
+        \item \textbf{Comparație:} AI-ul excelează la boiler-plate, dar omul identifică mai bine circuitele logice subtile.
+    \end{itemize}
+\end{frame}
+
+\section{Demo și Validare}
+\begin{frame}{7. Demo și Validare}
+    \begin{itemize}
+        \item \textbf{Rulare teste:} \texttt{make test} / \texttt{make test-structural}
+        \item \textbf{Generare rapoarte:} \texttt{make cov-statement-html}
+        \item \textbf{Video Demo:} \url{https://youtube.com/demo_placeholder}
+    \end{itemize}
+\end{frame}
+
+\section{Concluzii}
+\begin{frame}{8. Concluzii}
+    \begin{itemize}
+        \item Complexitatea ridicată necesită o strategie de testare multi-strat.
+        \item Acoperirea 100\% a instrucțiunilor nu este suficientă fără analiza ramurilor și a mutanților.
+        \item Tool-urile AI sunt un suport valoros, dar nu înlocuiesc rigoarea inginerească.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \centering
+    \Huge \textbf{Mulțumim!} \\
+    \bigskip
+    \Large Întrebări?
+\end{frame}
+
+\end{document}

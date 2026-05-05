@@ -5,6 +5,15 @@
 - CFG Mermaid pentru `TaxEngine.calculate_annual_tax`: `docs/tax_calculator_cfg_mermaid.md`
 - Model profesoara (Java): `docs/model_profesoara/MyClassTest.java`
 
+## Documentație și Rapoarte
+
+- **Documentație Completă (LaTeX):** `docs/documentation.tex`
+- **Analiza Acoperirii Structurale:** `docs/structural_coverage.md`
+- **Analiza Testării Funcționale:** `docs/functional_testing.md`
+- **Raport Mutation Testing:** `docs/mutation_testing.md`
+- **Raport Utilizare AI (Copilot):** `docs/raport_AI_Copilot.md`
+- **Prezentare Proiect (LaTeX Beamer):** `docs/presentation.tex`
+
 ## Automation
 
 Ghid complet Makefile:
