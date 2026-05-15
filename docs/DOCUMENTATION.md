@@ -8,7 +8,7 @@ Aplicația calculează impozitul anual pe venit în funcție de diverse categori
 ## 2. Configurația Sistemului
 
 ### 2.1 Configurația Software
-- **Sistem de Operare:** Linux (Ubuntu 22.04 LTS / Debian)
+- **Sistem de Operare:** Linux (Ubuntu 22.04 LTS)/ Windows
 - **Limbaj de Programare:** Python 3.13.2
 - **Utilizarea unei Mașini Virtuale:** Nu s-a utilizat mașină virtuală; s-a folosit un mediu virtual de Python (`venv`) pentru izolarea dependențelor.
 
