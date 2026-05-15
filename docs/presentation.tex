@@ -3,6 +3,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[romanian]{babel}
 \usepackage{hyperref}
+\usepackage{graphicx}
 
 % Tema prezentării
 \usetheme{Madrid}
@@ -10,118 +11,118 @@
 
 \title[Analiză și Testare Tax Calculator]{Analiza și Testarea Aplicației Tax Calculator}
 \subtitle{Proiect TSS 2026}
-\author{Echipa de Proiect}
+\author{Stefan Tacu}
 \date{\today}
 
 \begin{document}
 
-% Slide de titlu
+% 1. Slide de titlu
 \begin{frame}
     \titlepage
 \end{frame}
 
-% Cuprins
-\begin{frame}{Cuprins}
-    \tableofcontents
-\end{frame}
-
-\section{Obiectivele Proiectului}
-\begin{frame}{1. Obiectivele Proiectului}
+% 2. Introducere și Configurație
+\begin{frame}{1. Introducere și Configurație}
     \begin{itemize}
-        \item Implementarea unui motor de calcul fiscal robust.
-        \item Aplicarea tehnicilor de \textbf{Testare Funcțională}.
-        \item Analiza \textbf{Acoperirii Structurale} (Statement \& Branch).
-        \item Evaluarea prin \textbf{Mutation Testing}.
-        \item Integrarea tool-urilor \textbf{AI (GitHub Copilot)}.
-    \end{itemize}
-\end{frame}
-
-\section{Arhitectura Aplicației}
-\begin{frame}{2. Arhitectura Aplicației}
-    \begin{itemize}
-        \item \textbf{Limbaj:} Python 3.13.2
-        \item \textbf{Clasa principală:} \texttt{TaxEngine}
-        \item \textbf{Funcția cheie:} \texttt{calculate\_annual\_tax}
-        \item \textbf{Caracteristici:}
+        \item \textbf{Obiectiv:} Testarea riguroasă a unei aplicații de calcul fiscal.
+        \item \textbf{Stack Tehnic:}
         \begin{itemize}
-            \item Validări riguroase (Income, Age, Category).
-            \item Dispatcher pe categorii (Salary, Business, Freelance, Crypto, etc.).
-            \item Sistem de reduceri compuse (Senior, Rezidență, Familie).
+            \item Python 3.13.2, Pytest 8.1.1
+            \item Radon (Complexity), Mutmut (Mutation)
+            \item Coverage.py (Structural Coverage)
         \end{itemize}
+        \item \textbf{Funcționalitate:} Calcul taxe pe categorii (Salary, Business, Crypto, etc.) cu aplicare de deduceri complexe.
     \end{itemize}
 \end{frame}
 
-\section{Testare Funcțională}
-\begin{frame}{3. Testare Funcțională}
+% 3. Testare Funcțională (Black-Box)
+\begin{frame}{2. Testare Funcțională (Black-Box)}
     \begin{itemize}
-        \item \textbf{Tehnici:} BVA (Boundary Value Analysis) \& EP (Equivalence Partitioning).
-        \item \textbf{Cazuri acoperite:}
+        \item \textbf{Tehnici:} Equivalence Partitioning \& Boundary Value Analysis.
+        \item \textbf{Clase de Echivalență:}
         \begin{itemize}
-            \item Validări tipuri date.
-            \item Limite venit (0 - 1.000.000).
-            \item Praguri specifice pentru fiecare categorie de impozitare.
+            \item Venit: Valid [0, 1M], Invalid (<0, >1M).
+            \item Vârstă: Valid [0, 150], Invalid.
+            \item Categorii: 6 categorii valide + ramură default.
         \end{itemize}
-        \item \textbf{Rezultat:} Toate testele funcționale trecute cu succes.
+        \item \textbf{Status:} 100\% teste funcționale trecute.
     \end{itemize}
 \end{frame}
 
-\section{Acoperire Structurală}
-\begin{frame}{4. Acoperire Structurală (CFG)}
+% 4. Analiza Structurală: Teoria McCabe
+\begin{frame}{3. Analiza Structurală: Teoria McCabe}
     \begin{itemize}
-        \item \textbf{Complexitate Ciclomatică:} 41 (Grad F).
-        \item \textbf{Graf de Control (CFG):} 31 de noduri principale.
-        \item \textbf{Strategie:} Testarea drumurilor independente (Basis Path Testing).
-        \item \textbf{Acoperire finală:}
+        \item \textbf{Complexitate Ciclomatică (CC):} Măsură a numărului de circuite liniar independente.
+        \item \textbf{Formula McCabe:} $V(G) = e - n + 2p$ (unde $p=1$ pentru o subrutină).
+        \item \textbf{Aplicație:} În proiectul nostru, $V(G) = 41$ (Grad F).
+        \item \textbf{Testarea Circuitelor Independente:}
         \begin{itemize}
-            \item \textbf{Statement:} 100\%
-            \item \textbf{Branch:} 100\%
+            \item Identifică limita superioară pentru numărul de căi necesare acoperirii ramurilor.
+            \item \textbf{Set de bază:} Orice cale prin program se poate forma ca o combinație din acest set.
         \end{itemize}
+        \item \textbf{Avantaj:} Setul poate fi generat pentru a garanta \textit{Branch Coverage} 100\%.
     \end{itemize}
 \end{frame}
 
-\section{Mutation Testing}
-\begin{frame}{5. Mutation Testing}
+% 5. Rezultate Acoperire Structurală
+\begin{frame}{4. Rezultate Acoperire Structurală}
+    \begin{center}
+        \includegraphics[width=0.85\textwidth]{capturi_ecran/statement_coverage/branch-coverage-branch.png}
+    \end{center}
     \begin{itemize}
-        \item \textbf{Manual:} Generare de mutanți de ordin 1 (echivalenți, omorâți, supraviețuiți).
-        \item \textbf{Automat:} Utilizarea \texttt{mutmut}.
-        \item \textbf{Scor final:} \textbf{~79\%}.
-        \item \textbf{Îmbunătățiri:} Identificarea unor cazuri marginale neacoperite inițial de testele funcționale.
+        \item \textbf{Statement Coverage:} 100\%
+        \item \textbf{Branch Coverage:} 100\% (obținut după rafinarea suitei de teste pentru a acoperi ramurile \texttt{else} implicite).
     \end{itemize}
 \end{frame}
 
-\section{Utilizare GitHub Copilot}
-\begin{frame}{6. Utilizare GitHub Copilot}
+% 6. Testarea prin Mutație (Mutation Testing)
+\begin{frame}{5. Testarea prin Mutație (Mutation Testing)}
     \begin{itemize}
-        \item \textbf{Rol:} Asistent în scrierea testelor unitare și calculul valorilor așteptate.
-        \item \textbf{Beneficii:} Viteză crescută de implementare.
-        \item \textbf{Atenție:} Necesită validare manuală a logicii matematice complexe.
-        \item \textbf{Comparație:} AI-ul excelează la boiler-plate, dar omul identifică mai bine circuitele logice subtile.
+        \item \textbf{Instrument:} \texttt{mutmut} (mutanți de ordin 1).
+        \item \textbf{Rezultate Automate:}
+        \begin{itemize}
+            \item Total mutanți: 228
+            \item Omorâți: 181
+            \item \textbf{Mutation Score: 79.3\%}
+        \end{itemize}
+        \item \textbf{Analiză Manuală:} Scor de 72.7\% pe un eșantion reprezentativ de 22 de mutanți.
     \end{itemize}
 \end{frame}
 
-\section{Demo și Validare}
-\begin{frame}{7. Demo și Validare}
+% 7. Analiza Mutanților: Supraviețuitori
+\begin{frame}{6. Analiza Mutanților: Supraviețuitori}
     \begin{itemize}
-        \item \textbf{Rulare teste:} \texttt{make test} / \texttt{make test-structural}
-        \item \textbf{Generare rapoarte:} \texttt{make cov-statement-html}
-        \item \textbf{Video Demo:} \url{https://youtube.com/demo_placeholder}
+        \item \textbf{Mutanți Echivalenți:} Modificarea \texttt{>} în \texttt{>=} la praguri unde diferența este zero (ex: Business category).
+        \item \textbf{Lipsă Precizie:} Supraviețuirea la modificarea rotunjirii (\texttt{round(tax, 1)}) a indicat aserțiuni prea permisive.
+        \item \textbf{Îmbunătățire:} Rezultatele au condus la adăugarea de teste de frontieră mai stricte pentru categoriile Investment și Freelance.
     \end{itemize}
 \end{frame}
 
-\section{Concluzii}
+% 8. Utilizare AI: GitHub Copilot
+\begin{frame}{7. Utilizare AI: GitHub Copilot}
+    \begin{itemize}
+        \item \textbf{Eficiență:} Creștere cu ~40\% a vitezei de scriere a testelor de tip boiler-plate.
+        \item \textbf{Puncte Forte:} Sugestii rapide pentru clasele de echivalență standard.
+        \item \textbf{Puncte Slabe:} Riscul de "halucinații" la calcule matematice complexe și omiterea cazurilor de frontieră pe logica de CC 41.
+        \item \textbf{Concluzie:} AI-ul este un copilot, dar decizia de testare rămâne la inginer.
+    \end{itemize}
+\end{frame}
+
+% 9. Concluzii
 \begin{frame}{8. Concluzii}
     \begin{itemize}
-        \item Complexitatea ridicată necesită o strategie de testare multi-strat.
-        \item Acoperirea 100\% a instrucțiunilor nu este suficientă fără analiza ramurilor și a mutanților.
-        \item Tool-urile AI sunt un suport valoros, dar nu înlocuiesc rigoarea inginerească.
+        \item \textbf{Rigoare:} Branch Coverage de 100\% este necesar dar nu suficient fără Mutation Testing.
+        \item \textbf{Complexitate:} Codul cu CC 41 (Rank F) este greu de întreținut și necesită teste automate dense.
+        \item \textbf{Validare:} Integrarea metodelor manuale cu cele automate oferă cel mai înalt grad de încredere în software.
     \end{itemize}
 \end{frame}
 
+% 10. Final
 \begin{frame}
     \centering
-    \Huge \textbf{Mulțumim!} \\
+    \Huge \textbf{Vă mulțumesc!} \\
     \bigskip
-    \Large Întrebări?
+    \Large Întrebări și discuții.
 \end{frame}
 
 \end{document}

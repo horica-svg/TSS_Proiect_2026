@@ -1,7 +1,7 @@
 # Fdb version 4
-["pdflatex"] 1778010502.87884 "/home/stefantacu/github/TSS_Proiect_2026/docs/presentation.tex" "presentation.pdf" "presentation" 1778010505.45371 0
+["pdflatex"] 1778869830.18028 "/home/stefantacu/github/TSS_Proiect_2026/docs/presentation.tex" "presentation.pdf" "presentation" 1778869832.78362 0
   "/etc/texmf/web2c/texmf.cnf" 1743444249.71553 475 c0e671620eb5563b2130f56340a5fde8 ""
-  "/home/stefantacu/github/TSS_Proiect_2026/docs/presentation.tex" 1778010402.89769 4476 6db8b88a340998f1797eafb8b393ca6d ""
+  "/home/stefantacu/github/TSS_Proiect_2026/docs/presentation.tex" 1778869764.51165 5017 c420f54dbac672a3091b9c6d52c220da ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1246382020 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
@@ -207,11 +207,11 @@
   "/usr/share/texmf/web2c/texmf.cnf" 1707919699 40399 f2c302f7d2af602abb742093540a5834 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1743485752.04257 5472669 54eaf61a88b6b7896ebd0dac973cb29c ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1743485806 8212138 f008d95a397d3096ca7a1d189a7f4dbc ""
-  "presentation.aux" 1778010505.28982 4319 7e6fc643cbd124bb768acfe74f89b205 "pdflatex"
-  "presentation.nav" 1778010505.29205 2569 cd51cfb1f9935433f2cb6b143c56766d "pdflatex"
-  "presentation.out" 1778010505.29079 1136 52a430883acfe4a4bfc62e91710f8721 "pdflatex"
-  "presentation.tex" 1778010402.89769 4476 6db8b88a340998f1797eafb8b393ca6d ""
-  "presentation.toc" 1778010505.29205 475 fb3ec1e5e8f85713e9cba09ed5f0066f "pdflatex"
+  "capturi_ecran/statement_coverage/branch-coverage-branch.png" 1776679692.13233 355804 f8d27b94a73c56c9a2b77244b61a7ca4 ""
+  "presentation.aux" 1778869832.62562 1803 80d1c42911b88403480084887295e542 "pdflatex"
+  "presentation.nav" 1778869832.62725 1109 07396102f9d82bf25877ba7d82798efb "pdflatex"
+  "presentation.out" 1778869831.41312 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "presentation.tex" 1778869764.51165 5017 c420f54dbac672a3091b9c6d52c220da ""
   (generated)
   "presentation.aux"
   "presentation.log"

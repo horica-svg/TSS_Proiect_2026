@@ -2,89 +2,92 @@ class: center, middle
 
 # Analiza și Testarea Aplicației Tax Calculator
 ## Proiect TSS 2026
-### Echipa de Proiect
+### Stefan Tacu
 
 ---
 
-# 1. Obiectivele Proiectului
+# 1. Introducere și Configurație
 
-- Implementarea unui motor de calcul fiscal robust.
-- Aplicarea tehnicilor de **Testare Funcțională**.
-- Analiza **Acoperirii Structurale** (Statement & Branch).
-- Evaluarea prin **Mutation Testing**.
-- Integrarea tool-urilor **AI (GitHub Copilot)**.
-
----
-
-# 2. Arhitectura Aplicației
-
-- **Limbaj:** Python 3.13.2
-- **Clasa principală:** `TaxEngine`
-- **Funcția cheie:** `calculate_annual_tax`
-- **Caracteristici:**
-  - Validări riguroase (Income, Age, Category).
-  - Dispatcher pe categorii (Salary, Business, Freelance, Crypto, etc.).
-  - Sistem de reduceri compuse (Senior, Rezidență, Familie).
+- **Obiectiv:** Testarea riguroasă a unei aplicații de calcul fiscal.
+- **Stack Tehnic:**
+  - Python 3.13.2, Pytest 8.1.1
+  - Radon (Complexity), Mutmut (Mutation)
+  - Coverage.py (Structural Coverage)
+- **Funcționalitate:** Calcul taxe pe categorii (Salary, Business, Crypto, etc.) cu aplicare de deduceri complexe.
 
 ---
 
-# 3. Testare Funcțională
+# 2. Testare Funcțională (Black-Box)
 
-- **Tehnici:** BVA (Boundary Value Analysis) & EP (Equivalence Partitioning).
-- **Cazuri acoperite:**
-  - Validări tipuri date.
-  - Limite venit (0 - 1.000.000).
-  - Praguri specifice pentru fiecare categorie de impozitare.
-- **Rezultat:** Toate testele funcționale trecute cu succes.
-
----
-
-# 4. Acoperire Structurală (CFG)
-
-- **Complexitate Ciclomatică:** 41 (Grad F).
-- **Graf de Control (CFG):** 31 de noduri principale.
-- **Strategie:** Testarea drumurilor independente (Basis Path Testing).
-- **Acoperire finală:**
-  - **Statement:** 100%
-  - **Branch:** 100%
+- **Tehnici:** Equivalence Partitioning & Boundary Value Analysis.
+- **Clase de Echivalență:**
+  - Venit: Valid [0, 1M], Invalid (<0, >1M).
+  - Vârstă: Valid [0, 150], Invalid.
+  - Categorii: 6 categorii valide + ramură default.
+- **Status:** 100% teste funcționale trecute.
 
 ---
 
-# 5. Mutation Testing
+# 3. Analiza Structurală: Teoria McCabe
 
-- **Manual:** Generare de mutanți de ordin 1 (echivalenți, omorâți, supraviețuiți).
-- **Automat:** Utilizarea `mutmut`.
-- **Scor final:** **~79%**.
-- **Îmbunătățiri:** Identificarea unor cazuri marginale neacoperite inițial de testele funcționale.
-
----
-
-# 6. Utilizare GitHub Copilot
-
-- **Rol:** Asistent în scrierea testelor unitare și calculul valorilor așteptate.
-- **Beneficii:** Viteză crescută de implementare.
-- **Atenție:** Necesită validare manuală a logicii matematice complexe.
-- **Comparație:** AI-ul excelează la boiler-plate, dar omul identifică mai bine circuitele logice subtile.
+- **Complexitate Ciclomatică (CC):** Măsură a numărului de circuite liniar independente.
+- **Formula McCabe:** $V(G) = e - n + 2p$ (unde $p=1$ pentru o subrutină).
+- **Aplicație:** În proiectul nostru, $V(G) = 41$ (Grad F).
+- **Testarea Circuitelor Independente:**
+  - Identifică limita superioară pentru numărul de căi necesare acoperirii ramurilor.
+  - **Set de bază:** Orice cale prin program se poate forma ca o combinație din acest set.
+- **Avantaj:** Setul poate fi generat pentru a garanta *Branch Coverage* 100%.
 
 ---
 
-# 7. Demo și Validare
+# 4. Rezultate Acoperire Structurală
 
-- **Rulare teste:** `make test` / `make test-structural`
-- **Generare rapoarte:** `make cov-statement-html`
-- **Video Demo:** [Link YouTube Placeholder]
+<center>
+    <img src="capturi_ecran/statement_coverage/branch-coverage-branch.png" width="85%">
+</center>
+
+- **Statement Coverage:** 100%
+- **Branch Coverage:** 100% (obținut după rafinarea suitei de teste pentru a acoperi ramurile `else` implicite).
+
+---
+
+# 5. Testarea prin Mutație (Mutation Testing)
+
+- **Instrument:** `mutmut` (mutanți de ordin 1).
+- **Rezultate Automate:**
+  - Total mutanți: 228
+  - Omorâți: 181
+  - **Mutation Score: 79.3%**
+- **Analiză Manuală:** Scor de 72.7% pe un eșantion reprezentativ de 22 de mutanți.
+
+---
+
+# 6. Analiza Mutanților: Supraviețuitori
+
+- **Mutanți Echivalenți:** Modificarea `>` în `>=` la praguri unde diferența este zero (ex: Business category).
+- **Lipsă Precizie:** Supraviețuirea la modificarea rotunjirii (`round(tax, 1)`) a indicat aserțiuni prea permisive.
+- **Îmbunătățire:** Rezultatele au condus la adăugarea de teste de frontieră mai stricte pentru categoriile Investment și Freelance.
+
+---
+
+# 7. Utilizare AI: GitHub Copilot
+
+- **Eficiență:** Creștere cu ~40% a vitezei de scriere a testelor de tip boiler-plate.
+- **Puncte Forte:** Sugestii rapide pentru clasele de echivalență standard.
+- **Puncte Slabe:** Riscul de "halucinații" la calcule matematice complexe și omiterea cazurilor de frontieră pe logica de CC 41.
+- **Concluzie:** AI-ul este un copilot, dar decizia de testare rămâne la inginer.
 
 ---
 
 # 8. Concluzii
 
-- Complexitatea ridicată necesită o strategie de testare multi-strat.
-- Acoperirea 100% a instrucțiunilor nu este suficientă fără analiza ramurilor și a mutanților.
-- Tool-urile AI sunt un suport valoros, dar nu înlocuiesc rigoarea inginerească.
+- **Rigoare:** Branch Coverage de 100% este necesar dar nu suficient fără Mutation Testing.
+- **Complexitate:** Codul cu CC 41 (Rank F) este greu de întreținut și necesită teste automate dense.
+- **Validare:** Integrarea metodelor manuale cu cele automate oferă cel mai înalt grad de încredere în software.
 
 ---
 
 class: center, middle
 
-# Mulțumim!
-## Întrebări?
+# Vă mulțumesc!
+## Întrebări și discuții.
