@@ -103,3 +103,29 @@ class TaxEngine:
             tax = 0  # pragma: no cover
 
         return round(tax, 2)
+
+
+def calculate_tax(
+    salary_income=0,
+    freelance_income=0,
+    crypto_income=0,
+    investment_income=0,
+    other_income=0,
+    family_conditions="none",
+    business_expenses=0,
+):
+    """
+    Wrapper function for AI comparison report.
+    Implements a logic that differs from AI's naive assumptions.
+    """
+    if freelance_income < 0:
+        raise ValueError("Income cannot be negative")
+
+    # Real business logic (for the sake of the report):
+    # Praguri: 20% pana la 45000 profit, 10% peste 45000 profit
+    profit = freelance_income - business_expenses
+    if profit <= 45000:
+        tax = profit * 0.20
+    else:
+        tax = profit * 0.10
+    return float(round(tax, 2))
