@@ -85,6 +85,4 @@ AI-ul nu intuiește valoarea de ieșire reală, ci aproximează un răspuns stat
 
 ### 5. Referințe Bibliografice 📚
 
-1. **Dakhel, A. M., et al. (2023).** *GitHub Copilot AI pair programmer: Asset or Liability?* Journal of Systems and Software.
-2. **Feldt, R., & Poulding, S. (2023).** *Towards Autonomous Testing with Large Language Models.* IEEE/ACM ASE.
-3. **Wang, J., et al. (2024).** *Software Testing with Large Language Models: Survey, Landscape, and Vision.* IEEE TSE.
+1. **Dakhel, A. M., et al. (2023).** *GitHub Copilot AI pair programmer: Asset or Liability?* Journal of Systems and Software, (https://arxiv.org/abs/2206.15331)
