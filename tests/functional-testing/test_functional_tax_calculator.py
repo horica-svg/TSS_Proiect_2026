@@ -92,10 +92,46 @@ class TestFunctionalTaxCalculator(unittest.TestCase) :
         self.assertEqual(self.engine.calculate_annual_tax(150000, "investment", 40, True), 24000.0)
 
     def test_other_category_brackets(self):
-        # intra pe ramura 'else'(ex: real_estate)
+        # intra pe ramura else(ex: real_estate)
         # <= 50000. taxa:5%
         self.assertEqual(self.engine.calculate_annual_tax(40000, "real_estate", 40, True), 2000.0)
         # > 50000 si <= 100000. taxa:2500+(income-50000)*0.10
         self.assertEqual(self.engine.calculate_annual_tax(80000, "real_estate", 40, True), 5500.0)
         # > 100000. taxa:7500+(income-100000)*0.20
         self.assertEqual(self.engine.calculate_annual_tax(150000, "real_estate", 40, True), 17500.0)
+
+    def test_investment_exact_boundary(self):
+        # omoara mutantul: income < 5000 mutat in income <= 5000
+        # testam exact 5000. originalul nu da reducere (5000*0.15=750)
+        # mutantul ar da reducere si ar pica testul.
+        self.assertEqual(self.engine.calculate_annual_tax(5000, "investment", 40, True), 750.0)
+
+    def test_other_category_exact_boundary(self):
+        # omoara mutantul: income <= 50000 mutat in income < 50000
+        # testam exact 50000 pe real_estate. original: 50000*0.05=2500
+        self.assertEqual(self.engine.calculate_annual_tax(50000, "real_estate", 40, True), 2500.0)
+
+    def test_freelance_negative_tax_limit(self):
+        # omoara mutantul Freelance_M2 (eliminat tax = max(0, tax))
+        # un venit super mic (1000) cu dependenti. 1000*0.12=120. 120-500 = -380
+        # originalul opreste la 0. mutantul ar returna -380 si ar pica.
+        self.assertEqual(self.engine.calculate_annual_tax(1000, "freelance", 30, True, has_dependents=True), 0.0)
+
+    def test_family_married_no_dependents(self):
+        # omoara mutantul Family_Conditions_M2 unde s-a schimbat logica la "not has_dependents"
+        # testam fix casatorit FARA dependenti
+        # venit 10000 (taxa baza 1000) * 0.95 = 950
+        self.assertEqual(self.engine.calculate_annual_tax(10000, "salary", 40, True, has_dependents=False, is_married=True), 950.0)
+
+    def test_return_values_rounding_two_decimals(self):
+        # omoara mutantul Return_Values_M1 (round(tax, 1) in loc de round(tax, 2))
+        # ne trebuie un test care da un rezultat cu doua zecimale. ex: 5555 la crypto non-rezident
+        # 5555 * 0.10 = 555.5 * 1.5 = 833.25
+        # mutantul ar returna 833.2 si testul il va prinde.
+        self.assertEqual(self.engine.calculate_annual_tax(5555, "crypto", 30, is_resident=False), 833.25)
+
+    def test_freelance_exact_boundary(self):
+        # omoara mutantul de frontiera ramas: income > 50000 mutat in income >= 50000
+        # testam exact 50000 pe freelance.
+        # taxa de baza: 50000 * 0.12 = 6000
+        self.assertEqual(self.engine.calculate_annual_tax(50000, "freelance", 30, True), 6000.0)
