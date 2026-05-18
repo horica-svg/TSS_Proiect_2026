@@ -228,3 +228,28 @@ Pentru a vedea detalii despre un mutant, se poate rula comanda **mutmut show < i
 * **Mutatie:** Am modificat `return round(tax, 2)` -> `return round(tax + 0.01, 2)`.
 * **Analiza:** Testul `test_salary_third_bracket` a esuat, ceea ce demonstreaza ca suita de teste este indeajuns pentru a verifica comportamentul aplicatiei. 
 * **Actiune:** Mutantul a fost omorat.
+
+## 3. Update Teste și Re-evaluarea Scorului de Mutație
+
+Pentru a omori mutantii care au supravietuit in analiza manuala, suita de teste a fost extinsa:
+* `test_investment_exact_boundary`
+* `test_other_category_exact_boundary`
+* `test_freelance_negative_tax_limit`
+* `test_family_married_no_dependents`
+* `test_return_values_rounding_two_decimals`
+* `test_freelance_exact_boundary`
+
+In urma aceste actualizari, mutantii analizati manual au fost omorati cu succes, confirmand eliminarea problemelor legate de valorile de frontiera.
+
+Pentru validarea globala a suitei extinse, am rulat din nou utilitarul *mutmut*. Rezultatul obtinut confirma faptul ca a avut loc o imbunatatire:
+
+```bash
+Running mutation testing
+⠼ 228/228  🎉 188 🫥 0  ⏰ 0  🤔 0  🙁 40  🔇 0  🧙 0
+18.45 mutations/second
+```
+
+Scorul obtinut anterior *181 / 228 = 0.7938 (79.38%)*
+Scorul obtinut in urma adaugarii testelor *188 / 228 = 0.8245 (82.45%)*
+
+Desi suita actuala de teste a atins obiectivele propuse si a omorat mutantii identificati manual, procesul de testare prin mutatie lasa loc pentru imbunatatiri viitoare.Inainte de a scrie noi teste pentru a reduce numarul de 40 de mutanti ramasi, este necesara o analiza manuala amanuntita a fiecaruia. Multi dintre acestia sunt, cel mai probabil, mutanti echivalenti.
