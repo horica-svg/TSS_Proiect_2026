@@ -34,7 +34,6 @@ Am adaugat scenarii specifice pentru a acoperi combinarea mai multor reguli de b
 * **Penalizari Crypto:** Am validat aplicarea factorului de multiplicare `x1.5` pentru utilizatorii non-rezidenti.
 
 
-*(... aici vine textul de la punctele 1, 2 si 3 pe care il ai deja ...)*
 
 ![Rezultate Testare Functionala](capturi_ecran/functional_testing/teste-trecute.png)
 
